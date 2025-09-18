@@ -3,8 +3,14 @@ using OpenNexus.Foundation.DDD.Validators;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
+/// <summary>
+/// Tests for the ImmutableDomainProperty class
+/// </summary>
 public class ImmutableDomainPropertyTests
 {
+    /// <summary>
+    /// Tests creating an ImmutableDomainProperty with a valid initial value
+    /// </summary>
     [Fact]
     public void Create_ReturnsSuccess_WhenValueIsValid()
     {
@@ -23,6 +29,9 @@ public class ImmutableDomainPropertyTests
         Assert.Equal("Hello", result.Value.Value);
     }
 
+    /// <summary>
+    /// Tests creating an ImmutableDomainProperty with an invalid initial value
+    /// </summary>
     [Fact]
     public void Create_ReturnsError_WhenValueIsInvalid()
     {
@@ -40,6 +49,9 @@ public class ImmutableDomainPropertyTests
         Assert.Contains("exceeds", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests creating an ImmutableDomainProperty or throwing if invalid
+    /// </summary>
     [Fact]
     public void CreateOrThrow_ReturnsInstance_WhenValueIsValid()
     {
@@ -56,6 +68,9 @@ public class ImmutableDomainPropertyTests
         Assert.Equal(42, primitive);
     }
 
+    /// <summary>
+    /// Tests that CreateOrThrow throws ArgumentException when the value is invalid
+    /// </summary>
     [Fact]
     public void CreateOrThrow_ThrowsArgumentException_WhenValueIsInvalid()
     {
@@ -69,6 +84,9 @@ public class ImmutableDomainPropertyTests
         Assert.Contains("Value cannot be empty", ex.Message);
     }
 
+    /// <summary>
+    /// Tests that ToString returns the underlying value's string representation
+    /// </summary>
     [Fact]
     public void ToString_ReturnsUnderlyingValue()
     {
@@ -83,6 +101,9 @@ public class ImmutableDomainPropertyTests
         Assert.Equal("Kepler", text);
     }
 
+    /// <summary>
+    /// Tests that the implicit operator returns the underlying value
+    /// </summary>
     [Fact]
     public void ImplicitOperator_ReturnsUnderlyingValue()
     {

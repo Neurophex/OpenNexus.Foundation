@@ -4,14 +4,18 @@ using OpenNexus.Foundation.Utils;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
-// Simple test implementation of DomainSetBase
+/// <summary>
+/// A test implementation of DomainSetBase for string items
+/// </summary>
 public class TestDomainSet : DomainSetBase<string>
 {
     public TestDomainSet() : base() { }
     public TestDomainSet(params ISetValidator<string>[] validators) : base(validators) { }
 }
 
-// Dummy validator for testing
+/// <summary>
+/// A validator that rejects a specific string value
+/// </summary>
 public class StringRejectValueValidator : ISetValidator<string>
 {
     private readonly string _reject;
@@ -25,8 +29,14 @@ public class StringRejectValueValidator : ISetValidator<string>
     }
 }
 
+/// <summary>
+/// Tests for the DomainSetBase class
+/// </summary>
 public class DomainSetBaseTests
 {
+    /// <summary>
+    /// Tests adding a valid item
+    /// </summary>
     [Fact]
     public void Add_ShouldAddItem_WhenValid()
     {
@@ -39,6 +49,9 @@ public class DomainSetBaseTests
         Assert.Single(set);
     }
 
+    /// <summary>
+    /// Tests adding a duplicate item
+    /// </summary>
     [Fact]
     public void Add_ShouldFail_WhenDuplicate()
     {
@@ -52,6 +65,9 @@ public class DomainSetBaseTests
         Assert.Single(set);
     }
 
+    /// <summary>
+    /// Tests adding an item that a validator rejects
+    /// </summary>
     [Fact]
     public void Add_ShouldFail_WhenValidatorRejects()
     {
@@ -64,6 +80,9 @@ public class DomainSetBaseTests
         Assert.Empty(set);
     }
 
+    /// <summary>
+    /// Tests removing an existing item
+    /// </summary>
     [Fact]
     public void Remove_ShouldRemove_WhenItemExists()
     {
@@ -77,6 +96,9 @@ public class DomainSetBaseTests
         Assert.Empty(set);
     }
 
+    /// <summary>
+    /// Tests removing a non-existing item
+    /// </summary>
     [Fact]
     public void Remove_ShouldFail_WhenItemNotExists()
     {
@@ -88,6 +110,9 @@ public class DomainSetBaseTests
         Assert.Equal("Item does not exist in the collection.", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests replacing all items in the set
+    /// </summary>
     [Fact]
     public void ReplaceAll_ShouldReplaceItems()
     {
@@ -103,6 +128,9 @@ public class DomainSetBaseTests
         Assert.Equal(2, set.Count);
     }
 
+    /// <summary>
+    /// Tests that AsReadOnlySet returns an immutable view of the set
+    /// </summary>
     [Fact]
     public void AsReadOnlySet_ShouldReturnImmutableSet()
     {
@@ -115,6 +143,9 @@ public class DomainSetBaseTests
         Assert.IsAssignableFrom<IReadOnlySet<string>>(readOnly);
     }
 
+    /// <summary>
+    /// Tests finding an item by predicate
+    /// </summary>
     [Fact]
     public void Find_ShouldReturnItem_WhenExists()
     {
@@ -127,6 +158,9 @@ public class DomainSetBaseTests
         Assert.Equal("A", result.Value);
     }
 
+    /// <summary>
+    /// Tests finding an item that does not exist
+    /// </summary>
     [Fact]
     public void Find_ShouldFail_WhenNotExists()
     {
@@ -138,6 +172,9 @@ public class DomainSetBaseTests
         Assert.Equal("Item not found.", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests finding all items matching a predicate
+    /// </summary>
     [Fact]
     public void FindAll_ShouldReturnMatchingItems()
     {
@@ -152,6 +189,9 @@ public class DomainSetBaseTests
         Assert.Contains("Apricot", result.Value);
     }
 
+    /// <summary>
+    /// Tests adding multiple items with AddRange
+    /// </summary>
     [Fact]
     public void AddRange_ShouldStopOnFirstFailure()
     {

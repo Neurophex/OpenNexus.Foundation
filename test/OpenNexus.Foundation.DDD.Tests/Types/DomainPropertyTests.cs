@@ -3,8 +3,14 @@ using OpenNexus.Foundation.DDD.Validators;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
+/// <summary>
+/// Tests for the DomainProperty class
+/// </summary>
 public class DomainPropertyTests
 {
+    /// <summary>
+    /// Tests creating a DomainProperty with a valid initial value
+    /// </summary>
     [Fact]
     public void Create_ReturnsSuccess_WhenInitialValueIsValid()
     {
@@ -19,6 +25,9 @@ public class DomainPropertyTests
         Assert.Equal("Hello", result.Value.Value);
     }
 
+    /// <summary>
+    /// Tests creating a DomainProperty with an invalid initial value
+    /// </summary>
     [Fact]
     public void Create_ReturnsError_WhenInitialValueIsInvalid()
     {
@@ -33,6 +42,9 @@ public class DomainPropertyTests
         Assert.Contains("exceeds", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests creating a DomainProperty or throwing if invalid
+    /// </summary>
     [Fact]
     public void CreateOrThrow_ReturnsInstance_WhenValueIsValid()
     {
@@ -45,6 +57,9 @@ public class DomainPropertyTests
         Assert.Equal(42, primitive);
     }
 
+    /// <summary>
+    /// Tests that CreateOrThrow throws ArgumentException when the value is invalid
+    /// </summary>
     [Fact]
     public void CreateOrThrow_ThrowsArgumentException_WhenValueIsInvalid()
     {
@@ -56,6 +71,9 @@ public class DomainPropertyTests
         Assert.Contains("Value cannot be empty", ex.Message);
     }
 
+    /// <summary>
+    /// Tests setting a new valid value
+    /// </summary>
     [Fact]
     public void SetValue_UpdatesValue_WhenNewValueIsValid()
     {
@@ -68,6 +86,9 @@ public class DomainPropertyTests
         Assert.Equal("Updated", prop.Value);
     }
 
+    /// <summary>
+    /// Tests that setting an invalid new value returns an error
+    /// </summary>
     [Fact]
     public void SetValue_ReturnsError_WhenNewValueIsInvalid()
     {
@@ -80,6 +101,9 @@ public class DomainPropertyTests
         Assert.Equal("Valid", prop.Value); // value should not change
     }
 
+    /// <summary>
+    /// Tests TrySetValue returns true and null error message when setting a valid value
+    /// </summary>
     [Fact]
     public void TrySetValue_ReturnsTrueAndNullError_WhenValid()
     {
@@ -93,6 +117,9 @@ public class DomainPropertyTests
         Assert.Equal(2, prop.Value);
     }
 
+    /// <summary>
+    /// Tests TrySetValue returns false and error message when setting an invalid value
+    /// </summary>
     [Fact]
     public void TrySetValue_ReturnsFalseAndError_WhenInvalid()
     {
@@ -106,6 +133,9 @@ public class DomainPropertyTests
         Assert.Equal("Valid", prop.Value); // unchanged
     }
 
+    /// <summary>
+    /// Tests that ToString returns the underlying value's string representation
+    /// </summary>
     [Fact]
     public void ToString_ReturnsUnderlyingValue()
     {
@@ -115,6 +145,9 @@ public class DomainPropertyTests
         Assert.Equal("Kepler", prop.ToString());
     }
 
+    /// <summary>
+    /// Tests that the implicit operator returns the underlying value
+    /// </summary>
     [Fact]
     public void ImplicitOperator_ReturnsUnderlyingValue()
     {

@@ -5,7 +5,9 @@ using OpenNexus.Foundation.Utils;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
-// Dummy ValueObject for testing
+/// <summary>
+/// A dummy value object for testing
+/// </summary>
 public sealed class DummyValueObject : ValueObject
 {
     public string Name { get; }
@@ -20,7 +22,9 @@ public sealed class DummyValueObject : ValueObject
     public override string ToString() => Name;
 }
 
-// Dummy validator
+/// <summary>
+/// A set validator that rejects items with a specific name
+/// </summary>
 public class RejectNameValidator : ISetValidator<DummyValueObject>
 {
     private readonly string _reject;
@@ -34,8 +38,14 @@ public class RejectNameValidator : ISetValidator<DummyValueObject>
     }
 }
 
+/// <summary>
+/// Tests for the ValueObjectSet class
+/// </summary>
 public class ValueObjectSetTests
 {
+    /// <summary>
+    /// Tests that a new set is empty
+    /// </summary>
     [Fact]
     public void NewSet_ShouldBeEmpty()
     {
@@ -43,6 +53,9 @@ public class ValueObjectSetTests
         Assert.Empty(set);
     }
 
+    /// <summary>
+    /// Tests adding a value object to the set
+    /// </summary>
     [Fact]
     public void Add_ShouldAddValueObject()
     {
@@ -56,6 +69,9 @@ public class ValueObjectSetTests
         Assert.Single(set);
     }
 
+    /// <summary>
+    /// Tests that adding a duplicate value object fails
+    /// </summary>
     [Fact]
     public void Add_ShouldFailOnDuplicate()
     {
@@ -70,6 +86,9 @@ public class ValueObjectSetTests
         Assert.Single(set);
     }
 
+    /// <summary>
+    /// Tests that adding a value object rejected by a validator fails
+    /// </summary>
     [Fact]
     public void Add_ShouldRespectValidators()
     {
@@ -83,6 +102,9 @@ public class ValueObjectSetTests
         Assert.Empty(set.AsEnumerable());
     }
 
+    /// <summary>
+    /// Tests removing a value object from the set
+    /// </summary>
     [Fact]
     public void Remove_ShouldWork()
     {
@@ -96,6 +118,9 @@ public class ValueObjectSetTests
         Assert.Empty(set.AsEnumerable());
     }
 
+    /// <summary>
+    /// Tests removing a non-existing value object fails
+    /// </summary>
     [Fact]
     public void ReplaceAll_ShouldReplace()
     {
@@ -114,6 +139,9 @@ public class ValueObjectSetTests
         Assert.Contains(set.AsEnumerable(), i => i.Name == "New2");
     }
 
+    /// <summary>
+    /// Tests finding a value object by predicate
+    /// </summary>
     [Fact]
     public void Find_ShouldReturnMatch()
     {
@@ -127,6 +155,9 @@ public class ValueObjectSetTests
         Assert.Equal(a, result.Value);
     }
 
+    /// <summary>
+    /// Tests that finding a non-existing value object returns an error
+    /// </summary>
     [Fact]
     public void Find_ShouldReturnError_WhenNotFound()
     {
@@ -139,6 +170,9 @@ public class ValueObjectSetTests
         Assert.Equal("Item not found.", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests finding all value objects matching a predicate
+    /// </summary>
     [Fact]
     public void FindAll_ShouldReturnMultiple()
     {
@@ -153,6 +187,9 @@ public class ValueObjectSetTests
         Assert.Equal(2, result.Value.Length);
     }
 
+    /// <summary>
+    /// Tests creating a validated set from an array of value objects
+    /// </summary>
     [Fact]
     public void CreateValidated_ShouldReturnSuccess_WhenAllValid()
     {
@@ -168,6 +205,9 @@ public class ValueObjectSetTests
         Assert.Equal(2, result.Value.Count);
     }
 
+    /// <summary>
+    /// Tests creating a validated set fails if any item is rejected by a validator
+    /// </summary>
     [Fact]
     public void CreateValidated_ShouldFail_WhenValidatorRejects()
     {

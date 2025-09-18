@@ -3,11 +3,18 @@ using OpenNexus.Foundation.Utils;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
+/// <summary>
+/// A validator that always succeeds
+/// </summary>
+/// <typeparam name="T"></typeparam>
 internal sealed class AlwaysValidValidator<T> : IValidator<T>
 {
     public Result Validate(T value) => Result.Success();
 }
 
+/// <summary>
+/// A validator that ensures a string is not empty
+/// </summary>
 internal sealed class NotEmptyStringValidator : IValidator<string>
 {
     public Result Validate(string value)
@@ -16,6 +23,9 @@ internal sealed class NotEmptyStringValidator : IValidator<string>
             : Result.Success();
 }
 
+/// <summary>
+/// A validator that ensures a string does not exceed a maximum length
+/// </summary>
 internal sealed class MaxLengthValidator : IValidator<string>
 {
     private readonly int _max;

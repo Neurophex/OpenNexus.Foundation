@@ -5,7 +5,9 @@ using OpenNexus.Foundation.Utils;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
-// Dummy entity for testing
+/// <summary>
+/// Dummy entity with GUID identity for testing
+/// </summary>
 public sealed class EntitySetTests_GuidEntity : Entity<Guid>
 {
     public string Name { get; }
@@ -18,6 +20,9 @@ public sealed class EntitySetTests_GuidEntity : Entity<Guid>
     public override string ToString() => $"{Name} ({Id})";
 }
 
+/// <summary>
+/// Dummy entity with INT identity for testing
+/// </summary>
 public sealed class EntitySetTests_IntEntity : Entity<int>
 {
     public string Name { get; }
@@ -25,6 +30,9 @@ public sealed class EntitySetTests_IntEntity : Entity<int>
     public override string ToString() => $"{Name} ({Id})";
 }
 
+/// <summary>
+/// Dummy entity with STRING identity for testing
+/// </summary>
 public sealed class EntitySetTests_StringEntity : Entity<string>
 {
     public string Description { get; }
@@ -32,8 +40,15 @@ public sealed class EntitySetTests_StringEntity : Entity<string>
     public override string ToString() => $"{Description} ({Id})";
 }
 
+/// <summary>
+/// Custom ID type for testing
+/// </summary>
+/// <param name="Value"></param>
 public record EntitySetTests_CustomId(int Value);
 
+/// <summary>
+/// Dummy entity with CUSTOM ID type for testing
+/// </summary>
 public sealed class EntitySetTests_CustomIdEntity : Entity<EntitySetTests_CustomId>
 {
     public string Label { get; }
@@ -41,6 +56,9 @@ public sealed class EntitySetTests_CustomIdEntity : Entity<EntitySetTests_Custom
     public override string ToString() => $"{Label} ({Id.Value})";
 }
 
+/// <summary>
+/// Dummy entity with INT identity for mixed tests
+/// </summary>
 public sealed class EntitySetTests_MixedEntity : Entity<int>
 {
     public string Label { get; }
@@ -48,9 +66,12 @@ public sealed class EntitySetTests_MixedEntity : Entity<int>
     public override string ToString() => $"{Label} ({Id})";
 }
 
+/// <summary>
+/// Validator that rejects entities whose string representation contains "X"
+/// </summary>
 public class EntitySetTests_RejectXValidator<TEntity, TId> : ISetValidator<TEntity>
-        where TEntity : Entity<TId>
-        where TId : notnull
+    where TEntity : Entity<TId>
+    where TId : notnull
 {
     public Result Validate(TEntity item, IReadOnlySet<TEntity> existingItems)
     {
@@ -60,7 +81,10 @@ public class EntitySetTests_RejectXValidator<TEntity, TId> : ISetValidator<TEnti
     }
 }
 
-// Validator that rejects entities with a given name
+
+/// <summary>
+/// Validator that rejects entities whose Name matches a specific value
+/// </summary>
 public class EntitySetTests_RejectNameValidator : ISetValidator<EntitySetTests_GuidEntity>
 {
     private readonly string _reject;
@@ -76,6 +100,9 @@ public class EntitySetTests_RejectNameValidator : ISetValidator<EntitySetTests_G
 
 public class EntitySetTests
 {
+    /// <summary>
+    /// Tests that Add should successfully add a new entity to the set.
+    /// </summary>
     [Fact]
     public void Add_ShouldAddEntity()
     {
@@ -89,6 +116,9 @@ public class EntitySetTests
         Assert.Single(set);
     }
 
+    /// <summary>
+    /// Tests that Add should reject duplicate entities with the same ID.
+    /// </summary>
     [Fact]
     public void Add_ShouldRejectDuplicateEntityById()
     {
@@ -105,6 +135,9 @@ public class EntitySetTests
         Assert.Single(set);
     }
 
+    /// <summary>
+    /// Tests that Add should respect the provided validator and reject invalid entities.
+    /// </summary>
     [Fact]
     public void Add_ShouldRespectValidator()
     {
@@ -118,6 +151,9 @@ public class EntitySetTests
         Assert.Empty(set.AsEnumerable());
     }
 
+    /// <summary>
+    /// Tests that FindById should return the correct entity when it exists.
+    /// </summary>
     [Fact]
     public void FindById_ShouldReturnEntity_WhenExists()
     {
@@ -132,6 +168,9 @@ public class EntitySetTests
         Assert.Equal(entity, result.Value);
     }
 
+    /// <summary>
+    /// Tests that FindById should return an error when the entity is not found.
+    /// </summary>
     [Fact]
     public void FindById_ShouldReturnError_WhenNotFound()
     {
@@ -143,6 +182,9 @@ public class EntitySetTests
         Assert.Equal("Item not found.", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests that ContainsId should return true when an entity with the given ID exists in the set.
+    /// </summary>
     [Fact]
     public void ContainsId_ShouldReturnTrue_WhenExists()
     {
@@ -153,6 +195,9 @@ public class EntitySetTests
         Assert.True(set.ContainsId(id));
     }
 
+    /// <summary>
+    /// Tests that ContainsId should return false when no entity with the given ID exists in the set.
+    /// </summary>
     [Fact]
     public void ContainsId_ShouldReturnFalse_WhenNotExists()
     {
@@ -161,6 +206,9 @@ public class EntitySetTests
         Assert.False(set.ContainsId(Guid.NewGuid()));
     }
 
+    /// <summary>
+    /// Tests that Remove should successfully remove an existing entity from the set.
+    /// </summary>
     [Fact]
     public void ReplaceAll_ShouldReplaceEntities()
     {
@@ -180,6 +228,9 @@ public class EntitySetTests
         Assert.All(newEntities, e => Assert.Contains(e, set.AsEnumerable()));
     }
 
+    /// <summary>
+    /// Tests that CreateValidated should return a successful result when all entities pass validation.
+    /// </summary>
     [Fact]
     public void CreateValidated_ShouldReturnSuccess_WhenAllValid()
     {
@@ -195,6 +246,9 @@ public class EntitySetTests
         Assert.Equal(2, result.Value.Count);
     }
 
+    /// <summary>
+    /// Tests that CreateValidated should return an error when the validator rejects an entity.
+    /// </summary>
     [Fact]
     public void CreateValidated_ShouldFail_WhenValidatorRejects()
     {
@@ -210,7 +264,9 @@ public class EntitySetTests
         Assert.Equal("Entity with name 'Forbidden' is not allowed.", result.GetErrorMessage());
     }
 
-    // === INT identity ===
+    /// <summary>
+    /// Tests that an EntitySet with INT identity works correctly.
+    /// </summary>
     [Fact]
     public void IntEntitySet_ShouldFindById()
     {
@@ -224,6 +280,9 @@ public class EntitySetTests
         Assert.Equal(e, result.Value);
     }
 
+    /// <summary>
+    /// Tests that adding an entity with a duplicate INT ID is rejected.
+    /// </summary>
     [Fact]
     public void IntEntitySet_ShouldRejectDuplicateId()
     {
@@ -238,7 +297,9 @@ public class EntitySetTests
         Assert.Equal("Item already exists in the collection.", result.GetErrorMessage());
     }
 
-    // === STRING identity ===
+    /// <summary>
+    /// Tests that an EntitySet with STRING identity can check for existence by ID.
+    /// </summary>
     [Fact]
     public void StringEntitySet_ShouldContainId()
     {
@@ -250,6 +311,9 @@ public class EntitySetTests
         Assert.False(set.ContainsId("zzz"));
     }
 
+    /// <summary>
+    /// Tests that CreateValidated should apply the validator and reject invalid entities.
+    /// </summary>
     [Fact]
     public void StringEntitySet_CreateValidated_ShouldApplyValidator()
     {
@@ -265,7 +329,9 @@ public class EntitySetTests
         Assert.Contains("not allowed", result.GetErrorMessage());
     }
 
-    // === CUSTOM ID identity ===
+    /// <summary>
+    /// Tests that an EntitySet with CUSTOM ID type works correctly.
+    /// </summary>
     [Fact]
     public void CustomIdEntitySet_ShouldWorkWithRecordId()
     {
@@ -281,6 +347,9 @@ public class EntitySetTests
         Assert.Equal(entity, result.Value);
     }
 
+    /// <summary>
+    /// Tests that adding an entity with a duplicate CUSTOM ID is rejected based on custom equality.
+    /// </summary>
     [Fact]
     public void CustomIdEntitySet_ShouldRejectDuplicates_ByCustomIdEquality()
     {
@@ -295,6 +364,9 @@ public class EntitySetTests
         Assert.Equal("Item already exists in the collection.", result.GetErrorMessage());
     }
 
+    /// <summary>
+    /// Tests that ReplaceAll should clear existing entities and add new ones.
+    /// </summary>
     [Fact]
     public void ReplaceAll_ShouldResetAndAllowNewFinds()
     {
@@ -320,6 +392,9 @@ public class EntitySetTests
         Assert.Equal("Twenty", result.Value.Label);
     }
 
+    /// <summary>
+    /// Tests that Add, Remove, and FindById operations remain consistent across multiple operations.
+    /// </summary>
     [Fact]
     public void Add_Remove_And_Find_ShouldRemainConsistent()
     {
@@ -345,6 +420,9 @@ public class EntitySetTests
         Assert.Equal(a, result.Value);
     }
 
+    /// <summary>
+    /// Tests that after ReplaceAll, adding an entity with a duplicate ID is rejected.
+    /// </summary>
     [Fact]
     public void ReplaceAll_ThenAdd_ShouldMaintainUniquenessById()
     {
@@ -368,6 +446,9 @@ public class EntitySetTests
         Assert.Equal("Hundred", found.Value.Label);
     }
 
+    /// <summary>
+    /// Tests that AddRange should add all valid entities or stop on the first validator failure.
+    /// </summary>
     [Fact]
     public void AddRange_ShouldAddAllOrStopOnValidatorFailure()
     {
@@ -392,6 +473,9 @@ public class EntitySetTests
         Assert.False(set.ContainsId(3));
     }
 
+    /// <summary>
+    /// Tests that after ReplaceAll, ContainsId and FindById work correctly across multiple operations.
+    /// </summary>
     [Fact]
     public void ReplaceAll_FollowedByContainsAndFind_ShouldWorkAcrossMultipleOps()
     {

@@ -6,26 +6,12 @@ namespace OpenNexus.Foundation.DDD.Core;
 /// Base class for all entities in the domain.
 /// Entities are mutable and defined by their identity.
 /// </summary>
-public abstract class Entity<TIdentity> : IDomainEventSource
+public abstract class Entity<TIdentity> : IEntityNode
 {
-    /// <summary>
-    /// A collection of domain events that have occurred on this entity.
-    /// </summary>
-    private readonly List<IDomainEvent> _domainEvents = [];
-
     /// <summary>
     /// The unique identifier for the entity.
     /// </summary>
     public TIdentity Id { get; private init; }
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    protected Entity()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    {
-        // Parameterless constructor for EF Core
-        // This is required for EF Core to create instances of this class
-        // when materializing entities from the database.
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Entity{TIdentity}"/> class with the specified identity.
@@ -83,31 +69,8 @@ public abstract class Entity<TIdentity> : IDomainEventSource
     }
 
     /// <summary>
-    /// Adds a domain event to the entity's domain events collection.
+    /// Gets the child nodes of the entity.
     /// </summary>
-    /// <param name="domainEvent"></param>
-    public void RaiseDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
-
-    /// <summary>
-    /// Removes all domain events registered to this entity.
-    /// </summary>
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
-    }
-
-    /// <summary>
-    /// Checks if there are any domain events registered with this entity.
-    /// </summary>
-    /// <returns>True if the amount of events on this entity is > 0.</returns>
-    public bool HasEvents() => _domainEvents.Count > 0;
-
-    /// <summary>
-    /// Gets all the domain events that have occurred on this entity.
-    /// </summary>
-    /// <returns>A read-only collection of domain events.</returns>
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    /// <returns></returns>
+    public virtual IEnumerable<IEntityNode> GetChildNodes() => [];
 }

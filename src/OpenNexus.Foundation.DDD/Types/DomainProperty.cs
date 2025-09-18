@@ -44,7 +44,7 @@ public sealed class DomainProperty<T> : DomainPropertyBase<T>
 
         // If all validators pass, set the new value and return success
         _value = newValue;
-        return validationResult;
+        return Result.Success();
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public sealed class DomainProperty<T> : DomainPropertyBase<T>
     /// <param name="value"></param>
     /// <param name="validators"></param>
     /// <returns></returns>
-    public static Result<DomainProperty<T>> Create(T value, IEnumerable<IValidator<T>> validators)
+    public static Result<DomainProperty<T>> Create(T value, params IValidator<T>[] validators)
     {
         // Validate the property
         var validationResult = Validate(value, validators);
@@ -90,7 +90,7 @@ public sealed class DomainProperty<T> : DomainPropertyBase<T>
     /// <param name="value"></param>
     /// <param name="validators"></param>
     /// <returns></returns>
-    public static DomainProperty<T> CreateOrThrow(T value, IEnumerable<IValidator<T>> validators)
+    public static DomainProperty<T> CreateOrThrow(T value, params IValidator<T>[] validators)
     {
         // This will throw if invalid
         ThrowIfInvalid(value, validators);

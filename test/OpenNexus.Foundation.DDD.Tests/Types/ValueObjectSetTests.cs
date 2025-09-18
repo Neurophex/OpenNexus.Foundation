@@ -1,17 +1,18 @@
 using OpenNexus.Foundation.DDD.Core;
 using OpenNexus.Foundation.DDD.Types;
+using OpenNexus.Foundation.DDD.Validators;
+using OpenNexus.Foundation.Utils;
 
 namespace OpenNexus.Foundation.DDD.Tests.Types;
 
-// ----- Simple fake value object for testing -----
-internal sealed class DummyValueObject : ValueObject
+// Dummy ValueObject for testing
+public sealed class DummyValueObject : ValueObject
 {
     public string Name { get; }
 
     public DummyValueObject(string name) => Name = name;
 
-    // ValueObject equality members
-    public override IEnumerable<object?> GetEqualityComponents()
+    public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Name;
     }
@@ -19,180 +20,166 @@ internal sealed class DummyValueObject : ValueObject
     public override string ToString() => Name;
 }
 
-public class ValueObjectCollectionTests
+// Dummy validator
+public class RejectNameValidator : ISetValidator<DummyValueObject>
+{
+    private readonly string _reject;
+    public RejectNameValidator(string reject) => _reject = reject;
+
+    public Result Validate(DummyValueObject item, IReadOnlySet<DummyValueObject> existingItems)
+    {
+        if (item.Name == _reject)
+            return Result.Error($"Item '{_reject}' is not allowed.");
+        return Result.Success();
+    }
+}
+
+public class ValueObjectSetTests
 {
     [Fact]
-    public void Constructor_Empty_CreatesEmptyCollection()
+    public void NewSet_ShouldBeEmpty()
     {
-        var collection = new ValueObjectSet<DummyValueObject>();
-
-        Assert.Equal(0, collection.Count);
-        Assert.Empty(collection.AsEnumerable());
+        var set = new ValueObjectSet<DummyValueObject>();
+        Assert.Empty(set);
     }
 
     [Fact]
-    public void Constructor_WithItems_PopulatesCollection()
+    public void Add_ShouldAddValueObject()
     {
-        var a = new DummyValueObject("A");
-        var b = new DummyValueObject("B");
+        var set = new ValueObjectSet<DummyValueObject>();
+        var item = new DummyValueObject("A");
 
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { a, b });
+        var result = set.Add(item);
 
-        Assert.Equal(2, collection.Count);
-        Assert.True(collection.Contains(a));
-        Assert.True(collection.Contains(b));
+        Assert.True(result.IsSuccess);
+        Assert.Contains(item, set.AsEnumerable());
+        Assert.Single(set);
     }
 
     [Fact]
-    public void Add_AddsNewItem()
+    public void Add_ShouldFailOnDuplicate()
     {
-        var collection = new ValueObjectSet<DummyValueObject>();
+        var set = new ValueObjectSet<DummyValueObject>();
+        var item = new DummyValueObject("A");
+        set.Add(item);
+
+        var result = set.Add(new DummyValueObject("A")); // same equality
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Item already exists in the collection.", result.GetErrorMessage());
+        Assert.Single(set);
+    }
+
+    [Fact]
+    public void Add_ShouldRespectValidators()
+    {
+        var set = new ValueObjectSet<DummyValueObject>(new RejectNameValidator("X"));
         var item = new DummyValueObject("X");
 
-        var result = collection.Add(item);
-
-        Assert.True(result.IsSuccess);
-        Assert.True(collection.Contains(item));
-        Assert.Equal(1, collection.Count);
-    }
-
-    [Fact]
-    public void Add_ReturnsError_WhenItemAlreadyExists()
-    {
-        var item = new DummyValueObject("X");
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { item });
-
-        var result = collection.Add(new DummyValueObject("X")); // same value
+        var result = set.Add(item);
 
         Assert.False(result.IsSuccess);
-        Assert.Contains("exists", result.GetErrorMessage(), StringComparison.OrdinalIgnoreCase);
-        Assert.Equal(1, collection.Count);
+        Assert.Equal("Item 'X' is not allowed.", result.GetErrorMessage());
+        Assert.Empty(set.AsEnumerable());
     }
 
     [Fact]
-    public void Remove_RemovesExistingItem()
+    public void Remove_ShouldWork()
     {
-        var item = new DummyValueObject("Y");
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { item });
+        var set = new ValueObjectSet<DummyValueObject>();
+        var item = new DummyValueObject("A");
+        set.Add(item);
 
-        var result = collection.Remove(item);
+        var result = set.Remove(item);
 
         Assert.True(result.IsSuccess);
-        Assert.False(collection.Contains(item));
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(set.AsEnumerable());
     }
 
     [Fact]
-    public void Remove_ReturnsError_WhenItemNotFound()
+    public void ReplaceAll_ShouldReplace()
     {
-        var collection = new ValueObjectSet<DummyValueObject>();
-        var item = new DummyValueObject("Z");
+        var set = new ValueObjectSet<DummyValueObject>();
+        set.Add(new DummyValueObject("Old"));
 
-        var result = collection.Remove(item);
-
-        Assert.False(result.IsSuccess);
-        Assert.Contains("does not exist", result.GetErrorMessage(), StringComparison.OrdinalIgnoreCase);
-    }
-
-    [Fact]
-    public void ReplaceAll_ReplacesAllItems()
-    {
-        var collection = new ValueObjectSet<DummyValueObject>(
-            new[] { new DummyValueObject("Old") });
-        var newItems = new[] { new DummyValueObject("New1"), new DummyValueObject("New2") };
-
-        var result = collection.ReplaceAll(newItems);
+        var result = set.ReplaceAll(new[]
+        {
+                new DummyValueObject("New1"),
+                new DummyValueObject("New2")
+            });
 
         Assert.True(result.IsSuccess);
-        Assert.Equal(2, collection.Count);
-        Assert.True(collection.Contains(newItems[0]));
-        Assert.True(collection.Contains(newItems[1]));
+        Assert.DoesNotContain(set.AsEnumerable(), i => i.Name == "Old");
+        Assert.Contains(set.AsEnumerable(), i => i.Name == "New1");
+        Assert.Contains(set.AsEnumerable(), i => i.Name == "New2");
     }
 
     [Fact]
-    public void AddRange_AddsMultipleItems()
+    public void Find_ShouldReturnMatch()
     {
-        var collection = new ValueObjectSet<DummyValueObject>();
-        var items = new[] { new DummyValueObject("A"), new DummyValueObject("B") };
-
-        var result = collection.AddRange(items);
-
-        Assert.True(result.IsSuccess);
-        Assert.Equal(2, collection.Count);
-        Assert.All(items, i => Assert.True(collection.Contains(i)));
-    }
-
-    [Fact]
-    public void AddRange_ReturnsError_OnFirstDuplicate()
-    {
+        var set = new ValueObjectSet<DummyValueObject>();
         var a = new DummyValueObject("A");
-        var b = new DummyValueObject("B");
-        var c = new DummyValueObject("A"); // duplicate of a
+        set.Add(a);
 
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { a });
-        var result = collection.AddRange(new[] { b, c });
-
-        Assert.False(result.IsSuccess);
-        Assert.Contains("exists", result.GetErrorMessage(), StringComparison.OrdinalIgnoreCase);
-        Assert.True(collection.Contains(b)); // B should have been added before failure
-    }
-
-    [Fact]
-    public void Find_ReturnsMatchingItem_WhenExists()
-    {
-        var a = new DummyValueObject("FindMe");
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { a });
-
-        var result = collection.Find(i => i.Name == "FindMe");
+        var result = set.Find(i => i.Name == "A");
 
         Assert.True(result.IsSuccess);
-        Assert.Equal("FindMe", result.Value.Name);
+        Assert.Equal(a, result.Value);
     }
 
     [Fact]
-    public void Find_ReturnsError_WhenNotFound()
+    public void Find_ShouldReturnError_WhenNotFound()
     {
-        var collection = new ValueObjectSet<DummyValueObject>();
+        var set = new ValueObjectSet<DummyValueObject>();
+        set.Add(new DummyValueObject("A"));
 
-        var result = collection.Find(i => i.Name == "Missing");
+        var result = set.Find(i => i.Name == "B");
 
         Assert.False(result.IsSuccess);
-        Assert.Contains("not found", result.GetErrorMessage(), StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("Item not found.", result.GetErrorMessage());
     }
 
     [Fact]
-    public void FindAll_ReturnsAllMatchingItems()
+    public void FindAll_ShouldReturnMultiple()
     {
-        var a = new DummyValueObject("Match1");
-        var b = new DummyValueObject("Nope");
-        var c = new DummyValueObject("Match2");
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { a, b, c });
+        var set = new ValueObjectSet<DummyValueObject>();
+        set.Add(new DummyValueObject("A1"));
+        set.Add(new DummyValueObject("A2"));
+        set.Add(new DummyValueObject("B1"));
 
-        var result = collection.FindAll(i => i.Name.Contains("Match"));
+        var result = set.FindAll(i => i.Name.StartsWith("A"));
 
         Assert.True(result.IsSuccess);
         Assert.Equal(2, result.Value.Length);
-        Assert.Contains(a, collection.AsEnumerable());
-        Assert.Contains(c, collection.AsEnumerable());
     }
 
     [Fact]
-    public void AsReadOnlySet_ReturnsSameItemsAndCannotBeModified()
+    public void CreateValidated_ShouldReturnSuccess_WhenAllValid()
     {
-        var a = new DummyValueObject("A");
-        var collection = new ValueObjectSet<DummyValueObject>(new[] { a });
-
-        var readOnly = collection.AsReadOnlySet();
-
-        Assert.True(readOnly.Contains(a));
-        Assert.Equal(collection.Count, readOnly.Count);
-
-        // readOnly is an IReadOnlySet<T>; we can enumerate but not modify
-        Assert.Throws<NotSupportedException>(() =>
+        var items = new[]
         {
-            // Cast to ICollection<T> to test immutability
-            var col = (ICollection<DummyValueObject>)readOnly;
-            col.Add(new DummyValueObject("B"));
-        });
+                new DummyValueObject("A"),
+                new DummyValueObject("B")
+            };
+
+        var result = ValueObjectSet<DummyValueObject>.CreateValidated(items);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, result.Value.Count);
+    }
+
+    [Fact]
+    public void CreateValidated_ShouldFail_WhenValidatorRejects()
+    {
+        var items = new[]
+        {
+                new DummyValueObject("A"),
+                new DummyValueObject("X")
+            };
+
+        var result = ValueObjectSet<DummyValueObject>.CreateValidated(items, new RejectNameValidator("X"));
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Item 'X' is not allowed.", result.GetErrorMessage());
     }
 }

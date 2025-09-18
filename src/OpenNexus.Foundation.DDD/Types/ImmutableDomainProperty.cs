@@ -37,7 +37,7 @@ public sealed class ImmutableDomainProperty<T> : DomainPropertyBase<T>
     /// <param name="value"></param>
     /// <param name="validators"></param>
     /// <returns></returns>
-    public static Result<ImmutableDomainProperty<T>> Create(T value, IEnumerable<IValidator<T>> validators)
+    public static Result<ImmutableDomainProperty<T>> Create(T value, params IValidator<T>[] validators)
     {
         // Validate the value using all validators
         var validationResult = Validate(value, validators);
@@ -56,7 +56,7 @@ public sealed class ImmutableDomainProperty<T> : DomainPropertyBase<T>
     /// <param name="value"></param>
     /// <param name="validators"></param>
     /// <returns></returns>
-    public static ImmutableDomainProperty<T> CreateOrThrow(T value, IEnumerable<IValidator<T>> validators)
+    public static ImmutableDomainProperty<T> CreateOrThrow(T value, params IValidator<T>[] validators)
     {
         // This will throw if invalid
         ThrowIfInvalid(value, validators);

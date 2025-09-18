@@ -41,6 +41,13 @@ public sealed class EntitySetTests_CustomIdEntity : Entity<EntitySetTests_Custom
     public override string ToString() => $"{Label} ({Id.Value})";
 }
 
+public sealed class EntitySetTests_MixedEntity : Entity<int>
+{
+    public string Label { get; }
+    public EntitySetTests_MixedEntity(int id, string label) : base(id) => Label = label;
+    public override string ToString() => $"{Label} ({Id})";
+}
+
 public class EntitySetTests_RejectXValidator<TEntity, TId> : ISetValidator<TEntity>
         where TEntity : Entity<TId>
         where TId : notnull
@@ -287,4 +294,127 @@ public class EntitySetTests
         Assert.False(result.IsSuccess);
         Assert.Equal("Item already exists in the collection.", result.GetErrorMessage());
     }
+
+    [Fact]
+    public void ReplaceAll_ShouldResetAndAllowNewFinds()
+    {
+        var set = new EntitySet<EntitySetTests_MixedEntity, int>();
+        var e1 = new EntitySetTests_MixedEntity(1, "First");
+        var e2 = new EntitySetTests_MixedEntity(2, "Second");
+        set.AddRange(new[] { e1, e2 });
+
+        // Replace with new set
+        var newEntities = new[]
+        {
+                new EntitySetTests_MixedEntity(10, "Ten"),
+                new EntitySetTests_MixedEntity(20, "Twenty")
+            };
+        set.ReplaceAll(newEntities);
+
+        Assert.Equal(2, set.Count);
+        Assert.False(set.ContainsId(1));
+        Assert.True(set.ContainsId(10));
+
+        var result = set.FindById(20);
+        Assert.True(result.IsSuccess);
+        Assert.Equal("Twenty", result.Value.Label);
+    }
+
+    [Fact]
+    public void Add_Remove_And_Find_ShouldRemainConsistent()
+    {
+        var set = new EntitySet<EntitySetTests_MixedEntity, int>();
+        var a = new EntitySetTests_MixedEntity(1, "Alpha");
+        var b = new EntitySetTests_MixedEntity(2, "Beta");
+
+        set.Add(a);
+        set.Add(b);
+
+        Assert.True(set.ContainsId(1));
+        Assert.True(set.ContainsId(2));
+
+        // Remove Beta
+        set.Remove(b);
+
+        Assert.False(set.ContainsId(2));
+        Assert.True(set.ContainsId(1));
+
+        // Find Alpha by Id
+        var result = set.FindById(1);
+        Assert.True(result.IsSuccess);
+        Assert.Equal(a, result.Value);
+    }
+
+    [Fact]
+    public void ReplaceAll_ThenAdd_ShouldMaintainUniquenessById()
+    {
+        var set = new EntitySet<EntitySetTests_MixedEntity, int>();
+        set.ReplaceAll(new[]
+        {
+                new EntitySetTests_MixedEntity(100, "Hundred"),
+                new EntitySetTests_MixedEntity(200, "TwoHundred")
+            });
+
+        // Attempt to add duplicate by ID
+        var duplicate = new EntitySetTests_MixedEntity(100, "Duplicate");
+        var result = set.Add(duplicate);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Item already exists in the collection.", result.GetErrorMessage());
+
+        // Ensure original entity still there
+        var found = set.FindById(100);
+        Assert.True(found.IsSuccess);
+        Assert.Equal("Hundred", found.Value.Label);
+    }
+
+    [Fact]
+    public void AddRange_ShouldAddAllOrStopOnValidatorFailure()
+    {
+        var validator = new EntitySetTests_RejectXValidator<EntitySetTests_MixedEntity, int>();
+        var set = new EntitySet<EntitySetTests_MixedEntity, int>(validator);
+
+        var entities = new[]
+        {
+                new EntitySetTests_MixedEntity(1, "Good"),
+                new EntitySetTests_MixedEntity(2, "X-Ray"),   // should trigger failure
+                new EntitySetTests_MixedEntity(3, "Later")
+            };
+
+        var result = set.AddRange(entities);
+
+        Assert.False(result.IsSuccess);
+        Assert.Contains("not allowed", result.GetErrorMessage());
+
+        // Should only contain the first "Good"
+        Assert.True(set.ContainsId(1));
+        Assert.False(set.ContainsId(2));
+        Assert.False(set.ContainsId(3));
+    }
+
+    [Fact]
+    public void ReplaceAll_FollowedByContainsAndFind_ShouldWorkAcrossMultipleOps()
+    {
+        var set = new EntitySet<EntitySetTests_MixedEntity, int>();
+        set.Add(new EntitySetTests_MixedEntity(5, "Old"));
+
+        // Replace with fresh items
+        set.ReplaceAll(new[]
+        {
+                new EntitySetTests_MixedEntity(50, "Fifty"),
+                new EntitySetTests_MixedEntity(60, "Sixty")
+            });
+
+        Assert.False(set.ContainsId(5));
+        Assert.True(set.ContainsId(50));
+
+        var find60 = set.FindById(60);
+        Assert.True(find60.IsSuccess);
+        Assert.Equal("Sixty", find60.Value.Label);
+
+        // Add another after replace
+        set.Add(new EntitySetTests_MixedEntity(70, "Seventy"));
+        Assert.True(set.ContainsId(70));
+    }
 }
+

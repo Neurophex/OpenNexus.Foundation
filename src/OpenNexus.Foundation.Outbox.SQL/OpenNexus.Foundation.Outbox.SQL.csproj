@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../OpenNexus.Foundation.Outbox/OpenNexus.Foundation.Outbox.csproj" />
+    </ItemGroup>
+
+    <!-- Add the SQL scripts as embedded resources -->
+    <ItemGroup>
+        <EmbeddedResource Include="Scripts\*.sql" />
+    </ItemGroup>
+</Project>

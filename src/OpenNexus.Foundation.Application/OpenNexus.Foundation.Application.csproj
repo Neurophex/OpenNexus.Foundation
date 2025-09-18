@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../OpenNexus.Foundation/OpenNexus.Foundation.csproj" />
+        <ProjectReference Include="../OpenNexus.Foundation.DDD/OpenNexus.Foundation.DDD.csproj" />
+        <ProjectReference Include="../OpenNexus.Foundation.CQRS/OpenNexus.Foundation.CQRS.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+<Project>
+    <!-- Define the base output and intermediate output paths -->
+    <PropertyGroup>
+        <BaseOutputPath>$(ProjectDir)..\\..\\build\\$(MSBuildProjectName)\\bin\\</BaseOutputPath>
+        <BaseIntermediateOutputPath>$(ProjectDir)..\\..\\build\\$(MSBuildProjectName)\\obj\\</BaseIntermediateOutputPath>
+    </PropertyGroup>
+
+    <!-- Define symbols based on the operating system -->
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+        <DefineConstants>$(DefineConstants);PLATFORM_WINDOWS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' == 'Unix'">
+        <DefineConstants>$(DefineConstants);PLATFORM_LINUX</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' == 'Darwin'">
+        <DefineConstants>$(DefineConstants);PLATFORM_OSX</DefineConstants>
+    </PropertyGroup>
+</Project>

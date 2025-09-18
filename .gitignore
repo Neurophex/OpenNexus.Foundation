@@ -1,0 +1,7 @@
+# Ignore build artifacts
+obj/
+bin/
+build/
+
+# Ignore log files
+*.log

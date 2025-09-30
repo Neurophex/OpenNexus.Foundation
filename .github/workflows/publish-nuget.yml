@@ -43,6 +43,4 @@ jobs:
           fi
 
       - name: Publish to GitHub Packages
-        run: dotnet nuget push "./nupkgs/*.nupkg" \
-               --source "https://nuget.pkg.github.com/neurophex/index.json" \
-               --api-key ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet nuget push "./nupkgs/*.nupkg" --source "https://nuget.pkg.github.com/neurophex/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}

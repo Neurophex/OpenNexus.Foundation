@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using OpenNexus.Foundation.CQRS.Core;
+using OpenNexus.Foundation.CQRS;
 using OpenNexus.Foundation.Persistence;
 using OpenNexus.Foundation.Primitives;
 

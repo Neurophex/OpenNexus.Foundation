@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OpenNexus.Foundation.CQRS.Core;
 using OpenNexus.Foundation.CQRS.Exceptions;
-using OpenNexus.Foundation.Utils;
+using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.CQRS;
 

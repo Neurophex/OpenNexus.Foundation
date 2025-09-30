@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../OpenNexus.Foundation/OpenNexus.Foundation.csproj" />
+        <ProjectReference Include="../OpenNexus.Foundation.Primitives/OpenNexus.Foundation.Primitives.csproj" />
+        <ProjectReference Include="../OpenNexus.Foundation.Persistence/OpenNexus.Foundation.Persistence.csproj" />
         <ProjectReference Include="../OpenNexus.Foundation.DDD/OpenNexus.Foundation.DDD.csproj" />
         <ProjectReference Include="../OpenNexus.Foundation.CQRS/OpenNexus.Foundation.CQRS.csproj" />
     </ItemGroup>

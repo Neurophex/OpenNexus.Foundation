@@ -1,4 +1,4 @@
-﻿namespace OpenNexus.Foundation.Utils;
+﻿namespace OpenNexus.Foundation.Primitives;
 
 /// <summary>
 /// Guard class for validating method arguments.

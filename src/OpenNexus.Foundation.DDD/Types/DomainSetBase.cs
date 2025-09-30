@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Immutable;
 using OpenNexus.Foundation.DDD.Validators;
-using OpenNexus.Foundation.Utils;
+using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.DDD.Types;
 

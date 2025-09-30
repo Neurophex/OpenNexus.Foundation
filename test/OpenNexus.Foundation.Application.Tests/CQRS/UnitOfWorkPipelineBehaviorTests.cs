@@ -3,7 +3,7 @@ using Moq;
 using OpenNexus.Foundation.Application.CQRS;
 using OpenNexus.Foundation.CQRS.Core;
 using OpenNexus.Foundation.Persistence;
-using OpenNexus.Foundation.Utils;
+using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.Application.Tests.CQRS;
 

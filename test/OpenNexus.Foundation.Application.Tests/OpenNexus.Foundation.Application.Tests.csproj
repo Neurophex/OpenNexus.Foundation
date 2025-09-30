@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/OpenNexus.Foundation.Application/OpenNexus.Foundation.Application.csproj" />
+    <ProjectReference Include="../../src/OpenNexus.Foundation.Persistence/OpenNexus.Foundation.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

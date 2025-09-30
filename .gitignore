@@ -3,5 +3,9 @@ obj/
 bin/
 build/
 
+# Ignore nuget packages
+*.nupkg
+nupkg/
+
 # Ignore log files
 *.log

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenNexus.Foundation.Application.CQRS;
 using OpenNexus.Foundation.CQRS;
 using OpenNexus.Foundation.CQRS.Core;
-using OpenNexus.Foundation.Utils;
+using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.Application.DependencyInjection;
 

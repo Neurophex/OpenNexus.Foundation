@@ -1,4 +1,4 @@
-namespace OpenNexus.Foundation.Utils;
+namespace OpenNexus.Foundation.Primitives;
 
 #region Result
 

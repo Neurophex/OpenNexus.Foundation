@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using OpenNexus.Foundation.Utils;
+using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.Outbox.SQL;
 

@@ -1,4 +1,4 @@
-namespace OpenNexus.Foundation.System;
+namespace OpenNexus.Foundation.Primitives;
 
 /// <summary>
 /// Interface for a clock service that provides the current date and time.

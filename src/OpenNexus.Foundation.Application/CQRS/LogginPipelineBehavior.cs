@@ -1,8 +1,7 @@
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using OpenNexus.Foundation.CQRS.Core;
-using OpenNexus.Foundation.System;
-using OpenNexus.Foundation.Utils;
+using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.Application.CQRS;
 

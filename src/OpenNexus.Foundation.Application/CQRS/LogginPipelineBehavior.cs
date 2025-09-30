@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using OpenNexus.Foundation.CQRS.Core;
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.Application.CQRS;
+namespace OpenNexus.Foundation.Application;
 
 /// <summary>
 /// Pipeline behavior for logging request and response details.

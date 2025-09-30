@@ -1,11 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenNexus.Foundation.Application.CQRS;
 using OpenNexus.Foundation.CQRS;
 using OpenNexus.Foundation.CQRS.Core;
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.Application.DependencyInjection;
+namespace OpenNexus.Foundation.Application;
 
 public static class CQRSServiceCollectionExtensions
 {

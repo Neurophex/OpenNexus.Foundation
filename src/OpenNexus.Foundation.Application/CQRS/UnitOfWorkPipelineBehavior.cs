@@ -3,7 +3,7 @@ using OpenNexus.Foundation.CQRS.Core;
 using OpenNexus.Foundation.Persistence;
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.Application.CQRS;
+namespace OpenNexus.Foundation.Application;
 
 /// <summary>
 /// Unit of Work Pipeline Behavior for Commands

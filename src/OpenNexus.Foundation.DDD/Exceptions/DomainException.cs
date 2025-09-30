@@ -1,4 +1,4 @@
-namespace OpenNexus.Foundation.DDD.Exceptions;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// Represents an exception that occurs within a specific domain.

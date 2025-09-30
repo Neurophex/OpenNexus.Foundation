@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Immutable;
-using OpenNexus.Foundation.DDD.Validators;
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.DDD.Types;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// An abstract base class for a collection of domain objects.

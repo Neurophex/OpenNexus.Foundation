@@ -1,6 +1,6 @@
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.DDD.Validators;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// Validator interface for validating items against a set of existing items.

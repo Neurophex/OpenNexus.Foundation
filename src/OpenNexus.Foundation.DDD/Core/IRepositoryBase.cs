@@ -1,6 +1,6 @@
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.DDD.Core;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// Interface for a generic repository base.

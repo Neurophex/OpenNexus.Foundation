@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace OpenNexus.Foundation.DDD.Core;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// Base class for all value objects in the domain.

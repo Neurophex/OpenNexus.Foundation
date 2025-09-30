@@ -1,4 +1,4 @@
-namespace OpenNexus.Foundation.DDD.Core;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// Indicates that an entity has child nodes.

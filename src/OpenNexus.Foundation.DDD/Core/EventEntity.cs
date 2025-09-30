@@ -1,6 +1,4 @@
-using OpenNexus.Foundation.DDD.Events;
-
-namespace OpenNexus.Foundation.DDD.Core;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// Base class for entities that produce domain events.

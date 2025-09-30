@@ -1,7 +1,6 @@
-using OpenNexus.Foundation.DDD.Validators;
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.DDD.Types;
+namespace OpenNexus.Foundation.DDD;
 
 /// <summary>
 /// A domain property that encapsulates a value along with its validation logic

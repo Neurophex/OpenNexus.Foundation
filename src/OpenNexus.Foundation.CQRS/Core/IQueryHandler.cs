@@ -1,6 +1,6 @@
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.CQRS.Core;
+namespace OpenNexus.Foundation.CQRS;
 
 /// <summary>
 /// Interface for a command handler in the CQRS pattern.

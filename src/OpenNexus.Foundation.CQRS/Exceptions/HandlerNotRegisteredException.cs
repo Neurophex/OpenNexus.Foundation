@@ -1,4 +1,4 @@
-namespace OpenNexus.Foundation.CQRS.Exceptions;
+namespace OpenNexus.Foundation.CQRS;
 
 /// <summary>
 /// Represents an exception that is thrown when a handler for a specific request type is not registered.

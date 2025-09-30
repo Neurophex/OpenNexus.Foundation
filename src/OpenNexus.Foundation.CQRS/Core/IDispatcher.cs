@@ -1,6 +1,6 @@
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.CQRS.Core;
+namespace OpenNexus.Foundation.CQRS;
 
 /// <summary>
 /// Dispatches a CQRS request to its appropriate handler and pipeline.

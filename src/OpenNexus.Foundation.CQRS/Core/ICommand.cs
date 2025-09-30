@@ -1,4 +1,4 @@
-namespace OpenNexus.Foundation.CQRS.Core;
+namespace OpenNexus.Foundation.CQRS;
 
 /// <summary>
 /// Interface for a command in the CQRS pattern without a response type.

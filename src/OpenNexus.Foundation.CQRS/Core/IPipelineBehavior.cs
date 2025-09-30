@@ -1,6 +1,6 @@
 using OpenNexus.Foundation.Primitives;
 
-namespace OpenNexus.Foundation.CQRS.Core;
+namespace OpenNexus.Foundation.CQRS;
 
 /// <summary>
 /// Delegate for a pipeline behavior in the CQRS pattern.

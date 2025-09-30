@@ -1,5 +1,5 @@
 using System.Reflection;
-using OpenNexus.Foundation.DDD.Events;
+using OpenNexus.Foundation.DDD;
 
 namespace OpenNexus.Foundation.DDD.Core;
 

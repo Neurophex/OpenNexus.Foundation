@@ -1,8 +1,8 @@
 using Moq;
 using Microsoft.Extensions.Logging;
-using OpenNexus.Foundation.CQRS.Core;
+using OpenNexus.Foundation.CQRS;
 using OpenNexus.Foundation.Primitives;
-using OpenNexus.Foundation.Application.CQRS;
+using OpenNexus.Foundation.Application;
 
 namespace OpenNexus.Foundation.Application.Tests.CQRS;
 

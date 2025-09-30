@@ -1,5 +1,4 @@
-using OpenNexus.Foundation.DDD.Core;
-using OpenNexus.Foundation.DDD.Events;
+using OpenNexus.Foundation.DDD;
 
 namespace OpenNexus.Foundation.DDD.Tests.Core;
 

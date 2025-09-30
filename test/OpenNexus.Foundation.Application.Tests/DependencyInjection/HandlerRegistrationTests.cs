@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using OpenNexus.Foundation.Application.DependencyInjection;
-using OpenNexus.Foundation.CQRS.Core;
+using OpenNexus.Foundation.Application;
+using OpenNexus.Foundation.CQRS;
 using OpenNexus.Foundation.Primitives;
 
 namespace OpenNexus.Foundation.Application.Tests.DependencyInjection;

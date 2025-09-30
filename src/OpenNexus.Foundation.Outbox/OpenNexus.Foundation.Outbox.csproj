@@ -6,9 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <!-- <ItemGroup>
+    <ItemGroup>
         <ProjectReference Include="../OpenNexus.Foundation.Primitives/OpenNexus.Foundation.Primitives.csproj" />
-    </ItemGroup> -->
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
@@ -16,10 +16,6 @@
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="OpenNexus.Foundation.DDD" Version="0.1.0"/>
     </ItemGroup>
 
 </Project>

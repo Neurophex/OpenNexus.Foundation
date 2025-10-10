@@ -8,7 +8,7 @@ namespace OpenNexus.Foundation.DDD;
 /// <typeparam name="T">The type of the Entity stored within this set</typeparam>
 /// <typeparam name="TIdentity">The type of the Entity id</typeparam>
 public sealed class EntitySet<T, TIdentity> : DomainSetBase<T>
-    where T : Entity<TIdentity>
+    where T : EntityBase<TIdentity>
     where TIdentity : notnull
 {
     /// <summary>

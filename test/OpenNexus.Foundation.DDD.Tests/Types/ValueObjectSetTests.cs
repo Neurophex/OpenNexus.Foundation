@@ -5,7 +5,7 @@ namespace OpenNexus.Foundation.DDD.Tests.Types;
 /// <summary>
 /// A dummy value object for testing
 /// </summary>
-public sealed class DummyValueObject : ValueObject
+public sealed class DummyValueObject : ValueObjectBase
 {
     public string Name { get; }
 

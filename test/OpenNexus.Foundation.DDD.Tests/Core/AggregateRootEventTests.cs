@@ -32,7 +32,7 @@ public class AggregateRootEventTests_DiscountApplied(Guid lineId, string code) :
 /// <summary>
 /// A discount entity that raises a domain event when created.
 /// </summary>
-public class AggregateRootEventTests_Discount : EventEntity<Guid>
+public class AggregateRootEventTests_Discount : EntityBase<Guid>
 {
     public string Code { get; }
 
@@ -46,7 +46,7 @@ public class AggregateRootEventTests_Discount : EventEntity<Guid>
 /// <summary>
 /// An order line entity that can have discounts and raises a domain event when created.
 /// </summary>
-public class AggregateRootEventTests_OrderLine : EventEntity<Guid>
+public class AggregateRootEventTests_OrderLine : EntityBase<Guid>
 {
     private readonly List<AggregateRootEventTests_Discount> _discounts = new();
 
@@ -67,7 +67,7 @@ public class AggregateRootEventTests_OrderLine : EventEntity<Guid>
 /// <summary>
 /// An order aggregate root that raises a domain event when created and can have order lines.
 /// </summary>
-public class AggregateRootEventTests_Order : AggregateRoot<Guid>
+public class AggregateRootEventTests_Order : AggregateRootBase<Guid>
 {
     private readonly List<AggregateRootEventTests_OrderLine> _lines = new();
 
@@ -104,7 +104,7 @@ public class AggregateRootEventTests
     public void PullDomainEvents_ShouldReturnChildEventsOnly_WhenRootHasNone()
     {
         var order = new AggregateRootEventTests_Order(Guid.NewGuid());
-        order.ClearAllDomainEvents(); // clear root’s OrderCreated
+        order.ClearDomainEvents(); // clear root’s OrderCreated
 
         order.AddLine(); // raises OrderLineAdded
 
@@ -118,7 +118,7 @@ public class AggregateRootEventTests
     public void PullDomainEvents_ShouldReturnGrandchildEvents()
     {
         var order = new AggregateRootEventTests_Order(Guid.NewGuid());
-        order.ClearAllDomainEvents(); // clear root events
+        order.ClearDomainEvents(); // clear root events
 
         order.AddLine();
         var line = order

@@ -7,7 +7,9 @@ namespace OpenNexus.Foundation.DDD;
 /// </summary>
 /// <typeparam name="TRoot"></typeparam>
 /// <typeparam name="TIdentity"></typeparam>
-public interface IRepositoryBase<TRoot, TIdentity> where TRoot : AggregateRoot<TIdentity>
+public interface IRepositoryBase<TRoot, TIdentity, TDataModel> 
+    where TRoot : IAggregateRoot<TIdentity>, IPersistentEntity<TRoot,TDataModel> 
+    where TDataModel : class
 {
     /// <summary>
     /// Asynchronously retrieves an entity by its identifier.

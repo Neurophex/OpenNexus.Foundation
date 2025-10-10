@@ -4,7 +4,10 @@ namespace OpenNexus.Foundation.DDD;
 /// Base class for all entities in the domain.
 /// Entities are mutable and defined by their identity.
 /// </summary>
-public abstract class Entity<TIdentity> : IEntityNode
+public abstract class EntityBase<TIdentity> :
+    IEntity<TIdentity>,
+    IEntityNode,
+    IDomainEventSource
 {
     /// <summary>
     /// The unique identifier for the entity.
@@ -12,10 +15,10 @@ public abstract class Entity<TIdentity> : IEntityNode
     public TIdentity Id { get; private init; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Entity{TIdentity}"/> class with the specified identity.
+    /// Initializes a new instance of the <see cref="EntityBase{TIdentity}"/> class with the specified identity.
     /// </summary>
     /// <param name="identity"></param>
-    public Entity(TIdentity identity)
+    public EntityBase(TIdentity identity)
     {
         Id = identity;
     }
@@ -47,7 +50,7 @@ public abstract class Entity<TIdentity> : IEntityNode
         }
 
         // Check if the object is the same instance
-        if (obj is not Entity<TIdentity> other)
+        if (obj is not EntityBase<TIdentity> other)
         {
             return false;
         }
@@ -71,4 +74,31 @@ public abstract class Entity<TIdentity> : IEntityNode
     /// </summary>
     /// <returns></returns>
     public virtual IEnumerable<IEntityNode> GetChildNodes() => [];
+
+    // The list of domain events produced by this entity
+    private readonly List<IDomainEvent> _domainEvents = [];
+
+    /// <summary>
+    /// Checks if there are any domain events that have been raised on the entity.
+    /// </summary>
+    /// <returns></returns>
+    protected bool HasEvents() => _domainEvents.Count > 0;
+
+    /// <summary>
+    /// Raises a new domain event and adds it to the list of events.
+    /// </summary>
+    /// <param name="domainEvent"></param>
+    protected void RaiseDomainEvent(IDomainEvent domainEvent) => _domainEvents.Add(domainEvent);
+
+    /// <summary>
+    /// Gets the domain events that have been raised on the entity.
+    /// This is a read-only collection.
+    /// </summary>
+    public IEnumerable<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+    /// <summary>
+    /// Clears all domain events that have been raised on the entity.
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public void ClearDomainEvents() => _domainEvents.Clear();
 }

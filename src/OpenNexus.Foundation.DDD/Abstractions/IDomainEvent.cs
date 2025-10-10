@@ -8,7 +8,7 @@ public interface IDomainEvent
     /// <summary>
     /// Gets the domain where the event occurred.
     /// </summary>
-    DateTime OccuredOn { get; }
+    DateTime OccurredOn { get; }
 
     /// <summary>
     /// Gets the correlation ID for the event, if any.

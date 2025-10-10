@@ -7,7 +7,7 @@ namespace OpenNexus.Foundation.DDD;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public sealed class ValueObjectSet<T> : DomainSetBase<T>
-    where T : ValueObject
+    where T : ValueObjectBase
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueObjectSet{T}"/> class.

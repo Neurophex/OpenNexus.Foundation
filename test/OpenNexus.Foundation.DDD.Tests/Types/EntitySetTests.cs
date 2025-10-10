@@ -6,7 +6,7 @@ namespace OpenNexus.Foundation.DDD.Tests.Types;
 /// <summary>
 /// Dummy entity with GUID identity for testing
 /// </summary>
-public sealed class EntitySetTests_GuidEntity : Entity<Guid>
+public sealed class EntitySetTests_GuidEntity : EntityBase<Guid>
 {
     public string Name { get; }
 
@@ -21,7 +21,7 @@ public sealed class EntitySetTests_GuidEntity : Entity<Guid>
 /// <summary>
 /// Dummy entity with INT identity for testing
 /// </summary>
-public sealed class EntitySetTests_IntEntity : Entity<int>
+public sealed class EntitySetTests_IntEntity : EntityBase<int>
 {
     public string Name { get; }
     public EntitySetTests_IntEntity(int id, string name) : base(id) => Name = name;
@@ -31,7 +31,7 @@ public sealed class EntitySetTests_IntEntity : Entity<int>
 /// <summary>
 /// Dummy entity with STRING identity for testing
 /// </summary>
-public sealed class EntitySetTests_StringEntity : Entity<string>
+public sealed class EntitySetTests_StringEntity : EntityBase<string>
 {
     public string Description { get; }
     public EntitySetTests_StringEntity(string id, string description) : base(id) => Description = description;
@@ -47,7 +47,7 @@ public record EntitySetTests_CustomId(int Value);
 /// <summary>
 /// Dummy entity with CUSTOM ID type for testing
 /// </summary>
-public sealed class EntitySetTests_CustomIdEntity : Entity<EntitySetTests_CustomId>
+public sealed class EntitySetTests_CustomIdEntity : EntityBase<EntitySetTests_CustomId>
 {
     public string Label { get; }
     public EntitySetTests_CustomIdEntity(EntitySetTests_CustomId id, string label) : base(id) => Label = label;
@@ -57,7 +57,7 @@ public sealed class EntitySetTests_CustomIdEntity : Entity<EntitySetTests_Custom
 /// <summary>
 /// Dummy entity with INT identity for mixed tests
 /// </summary>
-public sealed class EntitySetTests_MixedEntity : Entity<int>
+public sealed class EntitySetTests_MixedEntity : EntityBase<int>
 {
     public string Label { get; }
     public EntitySetTests_MixedEntity(int id, string label) : base(id) => Label = label;
@@ -68,7 +68,7 @@ public sealed class EntitySetTests_MixedEntity : Entity<int>
 /// Validator that rejects entities whose string representation contains "X"
 /// </summary>
 public class EntitySetTests_RejectXValidator<TEntity, TId> : ISetValidator<TEntity>
-    where TEntity : Entity<TId>
+    where TEntity : EntityBase<TId>
     where TId : notnull
 {
     public Result Validate(TEntity item, IReadOnlySet<TEntity> existingItems)

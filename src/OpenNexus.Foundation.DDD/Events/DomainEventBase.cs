@@ -21,7 +21,7 @@ public abstract class DomainEventBase : IDomainEvent
     /// <summary>
     /// Gets the date and time when the event occurred.
     /// </summary>
-    public DateTime OccuredOn => _occurredOn;
+    public DateTime OccurredOn => _occurredOn;
 
     /// <summary>
     /// Gets the correlation ID for the event, if any.

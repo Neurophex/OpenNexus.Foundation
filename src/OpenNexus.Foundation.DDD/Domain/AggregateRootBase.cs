@@ -4,13 +4,16 @@ namespace OpenNexus.Foundation.DDD;
 /// Base class for aggregate roots in the domain.
 /// </summary>
 /// <typeparam name="TIdentity">The type of Id for the given AggregateRoot</typeparam>
-public abstract class AggregateRoot<TIdentity> : EventEntity<TIdentity>
+public abstract class AggregateRootBase<TIdentity> : EntityBase<TIdentity>, IAggregateRoot<TIdentity>
 {
+    // Flag that indicates if the aggregate root has uncommitted changes
+    private bool _isDirty = false;
+
     /// <summary>
-    /// Initializes a new instance of the <see cref="AggregateRoot{TIdentity}"/> class with a specified identity.
+    /// Initializes a new instance of the <see cref="AggregateRootBase{TIdentity}"/> class with a specified identity.
     /// </summary>
     /// <param name="id"></param>
-    public AggregateRoot(TIdentity id) : base(id) { }
+    public AggregateRootBase(TIdentity id) : base(id) { }
 
     /// <summary>
     /// Collect all domain events raised by the aggregate root and its entities.
@@ -33,6 +36,19 @@ public abstract class AggregateRoot<TIdentity> : EventEntity<TIdentity>
     }
 
     /// <summary>
+    /// Marks the aggregate root as dirty, indicating it has uncommitted changes.
+    /// </summary>
+    protected void MarkDirty()
+    {
+        _isDirty = true;
+    }
+
+    /// <summary>
+    /// Indicates whether the aggregate root has uncommitted changes.
+    /// </summary>
+    public bool IsDirty => _isDirty;
+
+    /// <summary>
     /// Collect all domain events raised by the aggregate root and its entities without clearing them.
     /// </summary>
     /// <returns></returns>
@@ -42,12 +58,16 @@ public abstract class AggregateRoot<TIdentity> : EventEntity<TIdentity>
     }
 
     /// <summary>
-    /// Clears all domain events from the aggregate root and its entities.
+    /// Accepts all changes made to the aggregate root and its entities, clearing any raised domain events.
+    /// Also marks the aggregate root as not dirty.
     /// </summary>
-    public void ClearAllDomainEvents()
+    public void AcceptChanges()
     {
         // Loop through all event sources and clear their events
         foreach (var source in CollectEventSourcesRecursively(this)) source.ClearDomainEvents();
+
+        // Mark the aggregate root as not dirty
+        _isDirty = false;
     }
 
     /// <summary>

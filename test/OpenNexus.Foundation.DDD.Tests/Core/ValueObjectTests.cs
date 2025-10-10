@@ -5,7 +5,7 @@ namespace OpenNexus.Foundation.DDD.Tests.Core;
 /// <summary>
 /// A simple Money value object for testing purposes
 /// </summary>
-public sealed class Money : ValueObject
+public sealed class Money : ValueObjectBase
 {
     public decimal Amount { get; }
     public string Currency { get; }

@@ -6,7 +6,7 @@ namespace OpenNexus.Foundation.DDD;
 /// Base class for all value objects in the domain.
 /// Value objects are immutable and defined by their properties.
 /// </summary>
-public abstract class ValueObject : IEquatable<ValueObject>
+public abstract class ValueObjectBase : IValueObject<ValueObjectBase>
 {
     /// <summary>
     /// Returns a string representation of the value object, including its type and properties.
@@ -20,7 +20,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
             return false;
 
         // Cast the object to ValueObject
-        var other = obj as ValueObject;
+        var other = obj as ValueObjectBase;
 
         // Compare the equality components of the two value objects
         return Equals(other);
@@ -62,7 +62,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(ValueObject? other)
+    public bool Equals(ValueObjectBase? other)
     {
         // Check if the other object is null or not of the same type
         if (other is null)
@@ -79,7 +79,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator ==(ValueObject? left, ValueObject? right)
+    public static bool operator ==(ValueObjectBase? left, ValueObjectBase? right)
     {
         // If both are null, they are equal
         if (left is null && right is null)
@@ -99,7 +99,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator !=(ValueObject? left, ValueObject? right)
+    public static bool operator !=(ValueObjectBase? left, ValueObjectBase? right)
     {
         // Use the equality operator to determine if they are not equal
         return !(left == right);

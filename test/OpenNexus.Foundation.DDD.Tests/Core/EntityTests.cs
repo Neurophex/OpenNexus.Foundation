@@ -14,7 +14,7 @@ public sealed class TestDomainEvent : IDomainEvent
         Name = name;
     }
 
-    public DateTime OccuredOn { get; init; }
+    public DateTime OccurredOn { get; init; }
 
     public string? CorrelationId { get; init;}
 
@@ -24,7 +24,7 @@ public sealed class TestDomainEvent : IDomainEvent
 /// <summary>
 /// Represents a test entity for unit testing purposes.
 /// </summary>
-public sealed class TestEntity : Entity<Guid>
+public sealed class TestEntity : EntityBase<Guid>
 {
     public string Name { get; set; }
 

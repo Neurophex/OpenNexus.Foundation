@@ -6,7 +6,6 @@
         <Nullable>enable</Nullable>
         <IsPackable>True</IsPackable>
         <PackageId>OpenNexus.Foundation.DDD</PackageId>
-        <Version>0.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

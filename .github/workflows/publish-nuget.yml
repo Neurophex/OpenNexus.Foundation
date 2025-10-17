@@ -1,46 +1,61 @@
-name: Publish NuGet Package
+name: Publish Selected NuGet Packages
 
 on:
   push:
     tags:
-      - 'v*'   # runs automatically when you push a version tag like v0.1.0
-  workflow_dispatch:   # allows manual trigger from GitHub UI
+      - 'v*'
+  workflow_dispatch:
     inputs:
+      packages:
+        description: 'Comma-separated package names (e.g. DDD,Primitives)'
+        required: true
+        default: 'DDD,Primitives'
       version:
-        description: 'Package version (overrides .csproj if provided)'
+        description: 'Version override (optional)'
         required: false
         default: ''
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
         with:
-          dotnet-version: '8.0.x'
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          echo "Using version $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
+      - name: Build solution
         run: dotnet build --configuration Release --no-restore
 
-      - name: Pack NuGet package
+      - name: Pack selected packages
         run: |
-          if [ "${{ github.event.inputs.version }}" != "" ]; then
-            dotnet pack --configuration Release --no-build -o ./nupkgs /p:Version=${{ github.event.inputs.version }}
-          else
-            dotnet pack --configuration Release --no-build -o ./nupkgs
-          fi
+          IFS=',' read -ra PKGS <<< "${{ github.event.inputs.packages }}"
+          for pkg in "${PKGS[@]}"; do
+            echo "Packing OpenNexus.Foundation.$pkg..."
+            dotnet pack "src/OpenNexus.Foundation.$pkg/OpenNexus.Foundation.$pkg.csproj" \
+              --configuration Release --no-build -o ./nupkgs /p:Version=${{ steps.version.outputs.version }}
+          done
 
       - name: Publish to GitHub Packages
         run: dotnet nuget push "./nupkgs/*.nupkg" --source "https://nuget.pkg.github.com/neurophex/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}

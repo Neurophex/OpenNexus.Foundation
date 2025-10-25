@@ -1,9 +1,9 @@
 <Project>
     <!-- Define the base output and intermediate output paths -->
-    <PropertyGroup>
+    <!-- <PropertyGroup>
         <BaseOutputPath>$(SolutionDir)\\build\\$(MSBuildProjectName)\\bin\\</BaseOutputPath>
         <BaseIntermediateOutputPath>$(SolutionDir)\\build\\$(MSBuildProjectName)\\obj\\</BaseIntermediateOutputPath>
-    </PropertyGroup>
+    </PropertyGroup> -->
 
     <!-- Define symbols based on the operating system -->
     <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">

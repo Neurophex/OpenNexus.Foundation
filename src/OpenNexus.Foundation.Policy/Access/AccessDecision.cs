@@ -40,4 +40,13 @@ public sealed class AccessDecision : IAccessDecision
     /// <param name="reason"></param>
     /// <returns></returns>
     public static AccessDecision Deny(string reason) => new(false, reason);
+
+    /// <summary>
+    /// Returns a string representation of the access decision.
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+        return IsAccessGranted ? "Allowed" : $"Not allowed: {DenialReason}";
+    }
 }

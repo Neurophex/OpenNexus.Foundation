@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>True</IsPackable>
+        <PackageId>OpenNexus.Foundation.DataBroker</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../OpenNexus.Foundation.Primitives/OpenNexus.Foundation.Primitives.csproj" />
+        <ProjectReference Include="../OpenNexus.Foundation.Policy/OpenNexus.Foundation.Policy.csproj" />
+    </ItemGroup>
+
+</Project>

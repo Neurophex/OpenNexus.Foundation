@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="../OpenNexus.Foundation.Primitives/OpenNexus.Foundation.Primitives.csproj" />
+        <ProjectReference Include="../OpenNexus.Foundation.Application/OpenNexus.Foundation.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

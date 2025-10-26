@@ -14,7 +14,7 @@ public interface IDispatcher
     /// <param name="query"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Result<TResponse>> DispatchQuery<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default) where TResponse : notnull;
+    Task<Result<TResponse>> Query<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default) where TResponse : notnull;
 
     /// <summary>
     /// Dispatches a command to its handler and returns the result.
@@ -23,5 +23,5 @@ public interface IDispatcher
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Result<TResponse>> DispatchCommand<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default) where TResponse : notnull;
+    Task<Result<TResponse>> Command<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default) where TResponse : notnull;
 }
